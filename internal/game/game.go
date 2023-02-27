@@ -1,8 +1,13 @@
 package game
 
 import (
+	"bytes"
+	"image"
+	"log"
+	_ "image/png"
+
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/jessemolina/bronco/internal/resources/images"
 )
 
 const (
@@ -19,7 +24,6 @@ func NewGame() *Game {
 	g := &Game{}
 	return g
 }
-
 
 // ================================================================
 // CUSTOM TYPE
@@ -39,7 +43,15 @@ func (g *Game) Update() error {
 // Draws the image on screen every frame.
 // Frame depends on the refresh rate of the monitor.
 func (g *Game) Draw(screen *ebiten.Image) {
-	ebitenutil.DebugPrint(screen, "Go, Bronco, Go!")
+	// TODO Refactor image decoding into internal/resources/images
+	img, _, err := image.Decode(bytes.NewReader(images.HorseWalk_png))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	horse := ebiten.NewImageFromImage(img)
+
+	screen.DrawImage(horse, nil)
 }
 
 // Returns the game's logical screen based on the given window
@@ -49,5 +61,5 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func (g *Game) Run() error {
-   return ebiten.RunGame(g)
+	return ebiten.RunGame(g)
 }
