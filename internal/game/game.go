@@ -1,13 +1,10 @@
 package game
 
 import (
-	"bytes"
-	"image"
 	"log"
-	_ "image/png"
 
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/jessemolina/bronco/internal/resources/images"
+	"github.com/jessemolina/bronco/internal/objects"
 )
 
 const (
@@ -43,15 +40,11 @@ func (g *Game) Update() error {
 // Draws the image on screen every frame.
 // Frame depends on the refresh rate of the monitor.
 func (g *Game) Draw(screen *ebiten.Image) {
-	// TODO Refactor image decoding into internal/resources/images
-	img, _, err := image.Decode(bytes.NewReader(images.HorseWalk_png))
+	h := objects.NewHorse(windowWidth/2, windowHeight/2)
+	err := h.Draw(screen)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error: %v", err)
 	}
-
-	horse := ebiten.NewImageFromImage(img)
-
-	screen.DrawImage(horse, nil)
 }
 
 // Returns the game's logical screen based on the given window
