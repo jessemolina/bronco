@@ -19,6 +19,10 @@ func NewGame() *Game {
 	ebiten.SetWindowSize(windowWidth, windowWidth)
 	ebiten.SetWindowTitle("Go Bronco!")
 	g := &Game{}
+
+	g.objects = []objects.Object{
+		objects.NewHorse(6, windowWidth/2, windowHeight/2),
+	}
 	return g
 }
 
@@ -28,22 +32,27 @@ func NewGame() *Game {
 // Implements the Game interface.
 // Methods required are Update, Draw, Layout.
 type Game struct {
-	tick int
+	tick    int
+	objects []objects.Object
 }
 
 // Updates the Tick, the time unit for logical updates.
 func (g *Game) Update() error {
 	g.tick++
+	for _, o := range g.objects {
+		o.Update()
+	}
 	return nil
 }
 
 // Draws the image on screen every frame.
 // Frame depends on the refresh rate of the monitor.
 func (g *Game) Draw(screen *ebiten.Image) {
-	h := objects.NewHorse(windowWidth/2, windowHeight/2)
-	err := h.Draw(screen)
-	if err != nil {
-		log.Fatalf("Error: %v", err)
+	for _, o := range g.objects {
+		err := o.Draw(screen)
+		if err != nil {
+			log.Fatalf("Error: %v", err)
+		}
 	}
 }
 
