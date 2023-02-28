@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"image"
 	_ "image/png"
+	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
@@ -15,26 +16,38 @@ var message = `g.count: %v
 x0, y0: (%v,%v)
 x1, y1: (%v,%v)
 i: %v
+size: %v, %v
 `
 
-func NewHorse(tx, ty float64) *Horse {
+func NewHorse(frames int, tx float64, ty float64) Object {
 
-	return &Horse{
-		width:  72,
-		height:  72,
-		frames:  6,
-		x: 0,
-		tx: tx,
-		ty: ty,
+	// Decode into Ebiten Image
+	img, err := tools.DecodeImage(images.HorseWalk_png)
+	if err != nil {
+		log.Fatalf("Unable to decode Horse: %v", err)
 	}
+
+	w, h := img.Size()
+
+	w = w / frames
+
+	horse := &Horse{
+		img: img,
+		w:   w,
+		h:   h,
+		x:   0,
+		tx:  tx,
+		ty:  ty,
+	}
+
+	return horse
 }
 
 // Import images that are already decoded.
 type Horse struct {
 	img *ebiten.Image
-	width   int // frame width
-	height   int // frame height
-	frames   int // frame count
+	w   int     // frame width
+	h   int     // frame height
 	x   float64 // starting point
 	y   float64 // x + h
 	tx  float64
@@ -51,12 +64,6 @@ func (h *Horse) Update() error {
 // Method for Drawing
 func (h *Horse) Draw(target *ebiten.Image) error {
 
-	// Decode into Ebiten Image
-	img, err := tools.DecodeImage(images.HorseWalk_png)
-	if err != nil {
-		return err
-	}
-
 	// Options for drawing image
 	opts := &ebiten.DrawImageOptions{}
 	opts.GeoM.Translate(h.tx, h.ty)
@@ -71,9 +78,10 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 	// Crop spritesheet
 	r := image.Rect(x0, y0, x1, y1)
 
-	sub := img.SubImage(r).(*ebiten.Image)
+	sub := h.img.SubImage(r).(*ebiten.Image)
 
-	stats := fmt.Sprintf(message,"g.count",x0,y0,x1,y1,"i")
+	a, b := h.img.Size()
+	stats := fmt.Sprintf(message, "g.count", x0, y0, x1, y1, "i", a, b)
 	ebitenutil.DebugPrint(target, stats)
 
 	target.DrawImage(sub, opts)
