@@ -10,4 +10,7 @@ var (
 
 	//go:embed horse/Jump.png
 	HorseJump_png []byte
+
+	//go:embed horse/Jump.png
+	HorseIdle_png []byte
 )
