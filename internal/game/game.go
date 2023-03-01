@@ -32,7 +32,7 @@ func NewGame() *Game {
 // Implements the Game interface.
 // Methods required are Update, Draw, Layout.
 type Game struct {
-	tick    int
+	tick    uint
 	objects []objects.Object
 }
 
@@ -40,7 +40,7 @@ type Game struct {
 func (g *Game) Update() error {
 	g.tick++
 	for _, o := range g.objects {
-		o.Update()
+		o.Update(g.tick)
 	}
 	return nil
 }
