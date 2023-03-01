@@ -36,6 +36,7 @@ func NewHorse(frames int, tx float64, ty float64) Object {
 		frameWidth:  w,
 		frameHeight: h,
 		frameX:      0,
+		frameY:      0,
 		targetX:     tx,
 		targetY:     ty,
 	}
@@ -46,10 +47,10 @@ func NewHorse(frames int, tx float64, ty float64) Object {
 // Import images that are already decoded.
 type Horse struct {
 	img         *ebiten.Image
-	frameWidth  int     // frame width
-	frameHeight int     // frame height
-	frameX      float64 // starting point
-	frameY      float64 // x + h
+	frameWidth  int // frame width
+	frameHeight int // frame height
+	frameX      int // starting point
+	frameY      int // x + h
 	targetX     float64
 	targetY     float64
 }
@@ -65,6 +66,7 @@ func (h *Horse) Update(tick uint) error {
 	log.Println("tick: ", tick, "frame: ", frame)
 
 	// TODO update x0 and
+	h.frameX = frame * h.frameWidth
 
 	return nil
 }
@@ -80,8 +82,8 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 	// x0, y0 := int(h.x), int(h.x)+h.height
 	// x1, y1 := x0 + h.width, y0 + h.height
 	//
-	x0, y0 := 0, 0
-	x1, y1 := 72, 72
+	x0, y0 := h.frameX, h.frameY
+	x1, y1 := x0 + h.frameWidth, y0 + h.frameHeight
 
 	// Crop spritesheet
 	r := image.Rect(x0, y0, x1, y1)
