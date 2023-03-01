@@ -19,6 +19,8 @@ i: %v
 size: %v, %v
 `
 
+// TODO Refactor NewHorse; remove frames parameter and
+// make known values as const.
 func NewHorse(frames int, tx float64, ty float64) Object {
 
 	// Decode into Ebiten Image
