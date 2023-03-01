@@ -65,7 +65,6 @@ func (h *Horse) Update(tick uint) error {
 	frame := (int(tick) / pace) % count
 	log.Println("tick: ", tick, "frame: ", frame)
 
-	// TODO update x0 and
 	h.frameX = frame * h.frameWidth
 
 	return nil
