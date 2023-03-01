@@ -13,4 +13,7 @@ var (
 
 	//go:embed horse/Jump.png
 	HorseIdle_png []byte
+
+	//go:embed background/Prairie.png
+	BgPrairie_png []byte
 )
