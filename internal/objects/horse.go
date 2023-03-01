@@ -32,12 +32,12 @@ func NewHorse(frames int, tx float64, ty float64) Object {
 	w = w / frames
 
 	horse := &Horse{
-		img: img,
-		w:   w,
-		h:   h,
-		x:   0,
-		tx:  tx,
-		ty:  ty,
+		img:         img,
+		frameWidth:  w,
+		frameHeight: h,
+		frameX:      0,
+		targetX:     tx,
+		targetY:     ty,
 	}
 
 	return horse
@@ -45,13 +45,13 @@ func NewHorse(frames int, tx float64, ty float64) Object {
 
 // Import images that are already decoded.
 type Horse struct {
-	img *ebiten.Image
-	w   int     // frame width
-	h   int     // frame height
-	x   float64 // starting point
-	y   float64 // x + h
-	tx  float64
-	ty  float64
+	img         *ebiten.Image
+	frameWidth  int     // frame width
+	frameHeight int     // frame height
+	frameX      float64 // starting point
+	frameY      float64 // x + h
+	targetX     float64
+	targetY     float64
 }
 
 // Horse type with image and position.
@@ -64,6 +64,8 @@ func (h *Horse) Update(tick uint) error {
 	frame := (int(tick) / pace) % count
 	log.Println("tick: ", tick, "frame: ", frame)
 
+	// TODO update x0 and
+
 	return nil
 }
 
@@ -72,7 +74,7 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 
 	// Options for drawing image
 	opts := &ebiten.DrawImageOptions{}
-	opts.GeoM.Translate(h.tx, h.ty)
+	opts.GeoM.Translate(h.targetX, h.targetY)
 
 	// coordinates
 	// x0, y0 := int(h.x), int(h.x)+h.height
