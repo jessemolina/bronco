@@ -57,7 +57,13 @@ type Horse struct {
 // Horse type with image and position.
 
 // Method for Updating
-func (h *Horse) Update() error {
+func (h *Horse) Update(tick uint) error {
+	// Pace determines how many ticks will occur before switching to next frame.
+	// Count is the number of frames in the sprite sheet.
+	pace, count := 5, 6
+	frame := (int(tick) / pace) % count
+	log.Println("tick: ", tick, "frame: ", frame)
+
 	return nil
 }
 
