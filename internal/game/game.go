@@ -22,7 +22,7 @@ func NewGame() *Game {
 
 	g.objects = []objects.Object{
 		objects.NewBackground(windowWidth/2-200, windowHeight/2-200),
-		objects.NewHorse(6, windowWidth/2, windowHeight/2),
+		objects.NewHorse(windowWidth/2, windowHeight/2),
 	}
 	return g
 }
