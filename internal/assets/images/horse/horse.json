@@ -1,0 +1,22 @@
+{
+  "images": [
+    {
+      "name": "Idle.png",
+      "width": 288,
+      "height": 72,
+      "frames": 4
+    },
+    {
+      "name": "Jump.png",
+      "width": 432,
+      "height": 72,
+      "frames": 6
+    },
+    {
+      "name": "Walk.png",
+      "width": 432,
+      "height": 72,
+      "frames": 6
+    }
+  ]
+}
