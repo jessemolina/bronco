@@ -4,12 +4,10 @@ import (
 	"fmt"
 	"image"
 	_ "image/png"
-	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
-	"github.com/jessemolina/bronco/internal/resources/images"
-	"github.com/jessemolina/bronco/pkg/tools"
+	"github.com/jessemolina/bronco/internal/assets/images/horse"
 )
 
 var message = `g.count: %v
@@ -19,22 +17,24 @@ i: %v
 size: %v, %v
 `
 
-// TODO Refactor NewHorse; remove frames parameter and
-// make known values as const.
-func NewHorse(frames int, tx float64, ty float64) Object {
+/*
+// TODO Refactor NewHorse; set default frames per sprites via json file.
+   NewHorse(name string, tx float64, ty float64)
 
-	// Decode into Ebiten Image
-	img, err := tools.DecodeImage(images.HorseWalk_png)
-	if err != nil {
-		log.Fatalf("Unable to decode Horse: %v", err)
-	}
+   sprites := images.Horse[name]
 
-	w, h := img.Size()
+   horse := &Horse{
 
-	w = w / frames
+   }
+*/
+func NewHorse(tx float64, ty float64) Object {
+
+	w, h := horse.Walk.Image.Size()
+
+	w = w / horse.Walk.Specs.Frames
 
 	horse := &Horse{
-		img:         img,
+		img:         horse.Walk.Image,
 		frameWidth:  w,
 		frameHeight: h,
 		frameX:      0,
@@ -65,7 +65,7 @@ func (h *Horse) Update(tick uint) error {
 	// Count is the number of frames in the sprite sheet.
 	pace, count := 5, 6
 	frame := (int(tick) / pace) % count
-	log.Println("tick: ", tick, "frame: ", frame)
+	//log.Println("tick: ", tick, "frame: ", frame)
 
 	h.frameX = frame * h.frameWidth
 
@@ -77,7 +77,8 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 
 	// Options for drawing image
 	opts := &ebiten.DrawImageOptions{}
-	opts.GeoM.Translate(h.targetX, h.targetY)
+	//opts.GeoM.Translate(h.targetX, h.targetY)
+	opts.GeoM.Scale(2, 2)
 
 	// coordinates
 	// x0, y0 := int(h.x), int(h.x)+h.height
