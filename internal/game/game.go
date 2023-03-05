@@ -25,6 +25,7 @@ func NewGame() *Game {
 
 	g.objects = []objects.Object{
 		objects.NewBackground(screenWidth, screenHeight),
+		objects.NewTiles(screenWidth, screenHeight),
 		objects.NewHorse(screenWidth, screenHeight),
 	}
 	return g
