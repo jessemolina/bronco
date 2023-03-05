@@ -8,13 +8,13 @@ import (
 	"github.com/jessemolina/bronco/pkg/sprites"
 )
 
-const specJSON = "internal/assets/images/background/tiles.json"
+const specJSON = "internal/assets/images/tiles/tiles.json"
 
 var (
-	PrairieTile *sprites.Sprites = &sprites.Sprites{Name: "PrairieTile.png"}
+	Prairie02 *sprites.Sprites = &sprites.Sprites{Name: "Prairie02.png"}
 
-	//go:embed PrairieTile.png
-	Prairie_png []byte
+	//go:embed Prairie02.png
+	Prairie02_png []byte
 )
 
 func init() {
@@ -23,5 +23,5 @@ func init() {
 		log.Fatalf("Unable to unmarshall specs: %v", err)
 	}
 
-	PrairieTile.Initialize(Prairie_png, sheet)
+	Prairie02.Initialize(Prairie02_png, sheet)
 }
