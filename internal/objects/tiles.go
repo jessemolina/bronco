@@ -10,15 +10,15 @@ import (
 func NewTiles(screenWidth int, screenHeight int) Object {
 	frameW, frameH := tiles.Prairie02.Image.Size()
 
-	scale := float64(screenHeight) / float64(frameH)
+	targetY := float64(screenHeight - frameH)
+	targetX := float64(0)
 
 	bg := &Tiles{
 		img:         tiles.Prairie02.Image,
 		frameWidth:  frameW,
 		frameHeight: frameH,
-		frameX:      0,
-		frameY:      0,
-		scale:       scale,
+		targetX:     targetX,
+		targetY:     targetY,
 	}
 
 	return bg
@@ -51,9 +51,20 @@ func (t *Tiles) Update(tick uint) error {
 
 func (t *Tiles) Draw(target *ebiten.Image) error {
 	// Options for drawing image
-	opts := &ebiten.DrawImageOptions{}
-	//opts.GeoM.Translate(bg.targetX, bg.targetY)
-	opts.GeoM.Scale(t.scale, t.scale)
+	//	opts.GeoM.Translate(t.targetX, t.targetY)
+
+	targetW, _ := target.Size()
+	repeat := targetW / t.frameWidth
+
+	for j := 0; j < repeat; j++ {
+		opts := &ebiten.DrawImageOptions{}
+		tx := float64(t.frameWidth * j)
+		opts.GeoM.Translate(tx, t.targetY)
+
+		target.DrawImage(t.img, opts)
+
+	}
+	//opts.GeoM.Scale(2, 2)
 
 	/*
 		x0, y0 := bg.frameX, bg.frameY
@@ -68,6 +79,5 @@ func (t *Tiles) Draw(target *ebiten.Image) error {
 		target.DrawImage(sub, opts)
 
 	*/
-	target.DrawImage(t.img, opts)
 	return nil
 }
