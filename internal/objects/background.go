@@ -1,35 +1,28 @@
 package objects
 
 import (
+	"image"
+	"log"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/jessemolina/bronco/internal/assets/images/background"
-	"github.com/jessemolina/bronco/pkg/animate"
 )
 
-func NewBackground(screenWidth int, screenHeight int) Object {
-	// set the frame to match the size of the bg image.
-	frameW, frameH := background.Prairie.Image.Size()
+func NewBackground(tx float64, ty float64) Object {
 
-	// determine how much the bg image should scale to match
-	// the screen's height.
-	scale := float64(screenHeight) / float64(frameH)
+	w, h := background.Prairie.Image.Size()
+	frames := 1
 
-	anm := &animate.Animation{
-		Img:         background.Prairie.Image,
-		FrameWidth:  frameW,
-		FrameHeight: frameH,
-		FrameX:      0,
-		FrameY:      0,
-		TargetX:     0,
-		TargetY:     0,
-		Scale:       scale,
-		Pace:        2,
-	}
+	w = w / frames
 
 	bg := &Background{
-		anm,
-		screenWidth,
-		screenHeight,
+		img:         background.Prairie.Image,
+		frameWidth:  w,
+		frameHeight: h,
+		frameX:      0,
+		frameY:      0,
+		targetX:     tx,
+		targetY:     ty,
 	}
 
 	return bg
@@ -37,83 +30,42 @@ func NewBackground(screenWidth int, screenHeight int) Object {
 
 // Import images that are already decoded.
 type Background struct {
-	animation    *animate.Animation
-	screenWidth  int
-	screenHeight int
+	img         *ebiten.Image
+	frameWidth  int // frame width
+	frameHeight int // frame height
+	frameX      int // starting point
+	frameY      int // x + h
+	targetX     float64
+	targetY     float64
 }
 
 func (bg *Background) Update(tick uint) error {
-	// TODO Switch implementation for status of the horse.
-	// It will update the ebiten sprite.
-	// bg.move should implement logic for moving the object.
-	// every sprite will have it's on pace and formula for
-	// change the targetX and targetY and at what pace.
-	max := float64(bg.animation.FrameWidth) * bg.animation.Scale
+	pace, count := 5, 1
+	frame := (int(tick) / pace) % count
+	log.Println("tick: ", tick, "frame: ", frame)
 
-	bg.animation.UpdateScrollWidth(max, -1)
+	bg.frameX = frame * bg.frameWidth + 10
 
-	//bg.move()
-	/*
-		pace, count := 5, 1
-		frame := (int(tick) / pace) % count
-		log.Println("tick: ", tick, "frame: ", frame, "scale:", bg.scale,
-			"h:", float64(bg.frameHeight)*bg.scale,
-			"w:", float64(bg.frameWidth)*bg.scale,
-		)
-
-		bg.frameX = frame*bg.frameWidth + 10
-
-	*/
 
 	return nil
 }
 
 func (bg *Background) Draw(target *ebiten.Image) error {
 	// Options for drawing image
-	//opts := &ebiten.DrawImageOptions{}
+	opts := &ebiten.DrawImageOptions{}
 	//opts.GeoM.Translate(bg.targetX, bg.targetY)
-	//opts.GeoM.Scale(bg.scale, bg.scale)
+	opts.GeoM.Scale(2, 2)
 
-	offsetX, offsetY := bg.animation.TargetX, 1.0
+	x0, y0 := bg.frameX, bg.frameY
+	x1, y1 := x0 + bg.frameWidth - 100, y0 + bg.frameHeight
 
-	const repeat = 4
-	for j := 0; j < repeat; j++ {
-		for i := 0; i < repeat; i++ {
-			opts := &ebiten.DrawImageOptions{}
-			// draws the images next to each other
-			opts.GeoM.Scale(bg.animation.Scale, bg.animation.Scale)
-			tx := float64(bg.animation.FrameWidth*j) * bg.animation.Scale
+	// Crop spritesheet
+	r := image.Rect(x0, y0, x1, y1)
 
-			//tx := float64(bg.frameWidth * i)
-			opts.GeoM.Translate(tx, 0)
+	sub := bg.img.SubImage(r).(*ebiten.Image)
 
-			opts.GeoM.Translate(offsetX, offsetY)
-			target.DrawImage(bg.animation.Img, opts)
-			/*
-				message := fmt.Sprintf(output,
-					bg.frameWidth, bg.frameHeight,
-					bg.frameX, bg.frameY,
-					bg.targetX, bg.targetY,
-					bg.scale,
-				)
 
-				ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f", ebiten.ActualTPS()))
-				ebitenutil.DebugPrint(target, message)
-			*/
-		}
-
-	}
+	target.DrawImage(sub, opts)
 
 	return nil
 }
-
-/*
-func (bg *Background) move() {
-	max := float64(bg.frameWidth) * bg.scale
-	// TODO make pace dynamic
-	bg.targetX -= 10
-	if float64(bg.targetX) < -max {
-		bg.targetX = 0
-	}
-}
-*/
