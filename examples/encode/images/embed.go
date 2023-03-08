@@ -12,12 +12,4 @@ var (
 	//go:embed runner.png
 	Runner_png []byte
 
-	//go:embed Prairie.png
-	Prairie_png []byte
-
-	//go:embed Prairie02.png
-	Floor_png []byte
-
-	//go:embed tile.png
-	Tile_png []byte
 )

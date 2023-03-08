@@ -1,10 +1,12 @@
 package objects
 
 import (
+	"fmt"
 	"image"
 	_ "image/png"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/jessemolina/bronco/internal/assets/images/horse"
 )
 
@@ -75,8 +77,7 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 
 	// Options for drawing image
 	opts := &ebiten.DrawImageOptions{}
-	// TODO dynamically update the targetX and Y for horse
-	opts.GeoM.Translate(50, 182)
+	//opts.GeoM.Translate(h.targetX, h.targetY)
 	opts.GeoM.Scale(2, 2)
 
 	// coordinates
@@ -90,6 +91,10 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 	r := image.Rect(x0, y0, x1, y1)
 
 	sub := h.img.SubImage(r).(*ebiten.Image)
+
+	a, b := h.img.Size()
+	stats := fmt.Sprintf(message, "g.count", x0, y0, x1, y1, "i", a, b)
+	ebitenutil.DebugPrint(target, stats)
 
 	target.DrawImage(sub, opts)
 

@@ -8,25 +8,21 @@ import (
 )
 
 const (
-	//	screenWidth      = 640
-	// screenHeight     = 480
-
-	screenWidth = 960
-	screenHeight = 540
+	windowWidth  = 800
+	windowHeight = 600
 )
 
 // ================================================================
 // CONVENIENCE FUNCTIONS
 
 func NewGame() *Game {
-	ebiten.SetWindowSize(screenWidth, screenHeight)
+	ebiten.SetWindowSize(windowWidth, windowWidth)
 	ebiten.SetWindowTitle("Go Bronco!")
 	g := &Game{}
 
 	g.objects = []objects.Object{
-		objects.NewBackground(screenWidth, screenHeight),
-		objects.NewTiles(screenWidth, screenHeight),
-		objects.NewHorse(screenWidth, screenHeight),
+		objects.NewBackground(windowWidth/2-200, windowHeight/2-200),
+		objects.NewHorse(windowWidth/2, windowHeight/2),
 	}
 	return g
 }
@@ -64,7 +60,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 // Returns the game's logical screen based on the given window
 // width and height.
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return screenWidth, screenHeight
+	return outsideWidth, outsideHeight
 }
 
 func (g *Game) Run() error {
