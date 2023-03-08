@@ -2,9 +2,6 @@ package animate
 
 import (
 	"fmt"
-
-	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 const (
@@ -18,7 +15,7 @@ pace:\t%v
 )
 
 // Prints the animation struct on screen.
-func (a *Animation)debugPrint(img *ebiten.Image) {
+func debugMessage(a *Animation) string {
 	message := fmt.Sprintf(output,
 		a.frameWidth, a.frameHeight,
 		a.frameX, a.frameY,
@@ -27,11 +24,10 @@ func (a *Animation)debugPrint(img *ebiten.Image) {
 		a.pace,
 	)
 
-	ebitenutil.DebugPrint(img, message)
+	return message
 }
 
 type Animation struct {
-	img         *ebiten.Image
 	frameWidth  int // frame width
 	frameHeight int // frame height
 	frameX      int // x coordinate on frame
