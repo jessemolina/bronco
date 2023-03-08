@@ -15,16 +15,7 @@ i: %v
 size: %v, %v
 `
 
-/*
-// TODO Refactor NewHorse; set default frames per sprites via json file.
-   NewHorse(name string, tx float64, ty float64)
-
-   sprites := images.Horse[name]
-
-   horse := &Horse{
-
-   }
-*/
+// TODO replace tx tx parameters for new horse
 func NewHorse(tx float64, ty float64) Object {
 
 	w, h := horse.Walk.Image.Size()
@@ -61,7 +52,7 @@ type Horse struct {
 func (h *Horse) Update(tick uint) error {
 	// Pace determines how many ticks will occur before switching to next frame.
 	// Count is the number of frames in the sprite sheet.
-	pace, count := 5, 6
+	pace, count := 3, 6
 	frame := (int(tick) / pace) % count
 	//log.Println("tick: ", tick, "frame: ", frame)
 
@@ -76,7 +67,7 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 	// Options for drawing image
 	opts := &ebiten.DrawImageOptions{}
 	// TODO dynamically update the targetX and Y for horse
-	opts.GeoM.Translate(50, 182)
+	opts.GeoM.Translate(50, 185)
 	opts.GeoM.Scale(2, 2)
 
 	// coordinates
