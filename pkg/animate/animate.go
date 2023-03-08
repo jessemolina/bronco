@@ -2,27 +2,17 @@ package animate
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
-
 const (
-
-	right direction = 1
-	left  direction = -1
-	down  direction = 1
-	up    direction = -1
-
-
-	output = `
-frameWidth, frameHeight:\t%v x %v
-frameX, frameY:\t%v x %v
-targetX, taregetY:\t%v x %v
-scale:\t%v
-pace:\t%v
-`
+	Right direction = 1
+	Left  direction = -1
+	Down  direction = 1
+	Up    direction = -1
 )
 
 type direction int
@@ -44,7 +34,15 @@ type Animation struct {
 }
 
 // Prints the animation struct on screen.
+// TODO fix animate debug message
 func (a *Animation) DebugMessage(target *ebiten.Image, targetX int, targetY int) {
+	output := `
+frameWidth, frameHeight:\t%v x %v
+frameX, frameY:\t%v x %v
+targetX, taregetY:\t%v x %v
+scale:\t%v
+pace:\t%v
+`
 	message := fmt.Sprintf(output,
 		a.FrameWidth, a.FrameHeight,
 		a.FrameX, a.FrameY,
@@ -52,24 +50,31 @@ func (a *Animation) DebugMessage(target *ebiten.Image, targetX int, targetY int)
 		a.Scale,
 		a.Pace,
 	)
+	log.Print(message)
 	ebitenutil.DebugPrintAt(target, message, targetX, targetY)
 }
-
 
 // animate
 
 // move
 
 // multiply
-func (a *Animation) multiply(target *ebiten.Image, count int) {
+func (a *Animation) DrawSequenceX(target *ebiten.Image, count int) {
 	for i := 0; i < count; i++ {
 		opts := &ebiten.DrawImageOptions{}
-		tx := float64(a.FrameWidth * i)
+		tx := float64(a.FrameWidth*i) + a.TargetX
 		opts.GeoM.Translate(tx, a.TargetY)
 		target.DrawImage(a.Img, opts)
 	}
 }
 
 // scroll (direction, pace)
+func (a *Animation) UpdateScrollWidth(maxWidth int, direction int) {
+	a.TargetX += (a.Pace * float64(direction))
+	max := float64(maxWidth* direction)
+	if a.TargetX < max {
+		a.TargetX = float64(0)
+	}
+}
 
 // jump
