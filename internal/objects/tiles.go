@@ -41,48 +41,16 @@ type Tiles struct {
 
 func (t *Tiles) Update(tick uint) error {
 	t.animate.UpdateScrollWidth(t.screenWidth, -1)
-	/*
-		pace, count := 5, 1
-		frame := (int(tick) / pace) % count
-		log.Println("tick: ", tick, "frame: ", frame, "scale:", t.scale,
-			"h:", float64(t.frameHeight)*t.scale,
-			"w:", float64(t.frameWidth)*t.scale,
-		)
-
-		t.frameX = frame*t.frameWidth + 10
-	*/
 
 	return nil
 }
 
 func (t *Tiles) Draw(target *ebiten.Image) error {
-	// Options for drawing image
-	/*
-	opts := &ebiten.DrawImageOptions{}
-	opts.GeoM.Translate(t.anm.TargetX, t.anm.TargetY)
-	target.DrawImage(t.anm.Img, opts)
-	*/
+	// create as many tiles to match the screenWidth.
+	// Multiply by 2 to enable scrolling.
 	targetW, _ := target.Size()
 	repeat := (targetW / t.animate.FrameWidth) * 2
 
 	t.animate.DrawSequenceX(target, repeat)
-
-		//
-
-	//opts.GeoM.Scale(2, 2)
-
-	/*
-		x0, y0 := bg.frameX, bg.frameY
-		x1, y1 := x0 + bg.frameWidth - 100, y0 + bg.frameHeight
-
-		// Crop spritesheet
-		r := image.Rect(x0, y0, x1, y1)
-
-		sub := bg.img.SubImage(r).(*ebiten.Image)
-
-
-		target.DrawImage(sub, opts)
-
-	*/
 	return nil
 }
