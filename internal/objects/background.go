@@ -73,7 +73,7 @@ func (bg *Background) Draw(target *ebiten.Image) error {
 	//opts := &ebiten.DrawImageOptions{}
 	//opts.GeoM.Translate(bg.targetX, bg.targetY)
 	//opts.GeoM.Scale(bg.scale, bg.scale)
-	//
+
 	offsetX, offsetY := bg.animation.TargetX, 1.0
 
 	const repeat = 4
@@ -83,6 +83,7 @@ func (bg *Background) Draw(target *ebiten.Image) error {
 			// draws the images next to each other
 			opts.GeoM.Scale(bg.animation.Scale, bg.animation.Scale)
 			tx := float64(bg.animation.FrameWidth*j) * bg.animation.Scale
+
 			//tx := float64(bg.frameWidth * i)
 			opts.GeoM.Translate(tx, 0)
 
