@@ -69,9 +69,16 @@ func (a *Animation) DrawSequenceX(target *ebiten.Image, count int) {
 }
 
 // scroll (direction, pace)
+// TODO fix scrolling direction for left and right
 func (a *Animation) UpdateScrollWidth(maxWidth int, direction int) {
-	a.TargetX += (a.Pace * float64(direction))
-	max := float64(maxWidth* direction)
+	switch direction {
+	case -1: 	a.TargetX += (a.Pace * float64(direction))
+	case 1: a.TargetX += (a.Pace * float64(direction))
+	default:
+	}
+	//	a.TargetX -= (a.Pace * float64(direction))
+	i := int(direction)
+	max := float64(maxWidth*i)
 	if a.TargetX < max {
 		a.TargetX = float64(0)
 	}
