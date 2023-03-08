@@ -63,6 +63,7 @@ func (a *Animation) DrawSequenceX(target *ebiten.Image, count int) {
 	for i := 0; i < count; i++ {
 		opts := &ebiten.DrawImageOptions{}
 		tx := float64(a.FrameWidth*i) + a.TargetX
+		opts.GeoM.Scale(a.Scale, a.Scale)
 		opts.GeoM.Translate(tx, a.TargetY)
 		target.DrawImage(a.Img, opts)
 	}
@@ -70,15 +71,15 @@ func (a *Animation) DrawSequenceX(target *ebiten.Image, count int) {
 
 // scroll (direction, pace)
 // TODO fix scrolling direction for left and right
-func (a *Animation) UpdateScrollWidth(maxWidth int, direction int) {
+func (a *Animation) UpdateScrollWidth(maxWidth float64, direction int) {
 	switch direction {
 	case -1: 	a.TargetX += (a.Pace * float64(direction))
 	case 1: a.TargetX += (a.Pace * float64(direction))
 	default:
 	}
 	//	a.TargetX -= (a.Pace * float64(direction))
-	i := int(direction)
-	max := float64(maxWidth*i)
+	i := float64(direction)
+	max := maxWidth*i
 	if a.TargetX < max {
 		a.TargetX = float64(0)
 	}
