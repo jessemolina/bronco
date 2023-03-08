@@ -21,15 +21,16 @@ func NewTiles(screenWidth int, screenHeight int) Object {
 		TargetX:     targetX,
 		TargetY:     targetY,
 		Pace: 2,
+		Scale: 2,
 	}
 
-	bg := &Tiles{
+	t := &Tiles{
 		anm,
 		screenWidth,
 		screenHeight,
 	}
 
-	return bg
+	return t
 }
 
 // Import images that are already decoded.
@@ -40,7 +41,7 @@ type Tiles struct {
 }
 
 func (t *Tiles) Update(tick uint) error {
-	t.animate.UpdateScrollWidth(t.screenWidth, -1)
+	t.animate.UpdateScrollWidth(float64(t.screenWidth), -1)
 
 	return nil
 }
