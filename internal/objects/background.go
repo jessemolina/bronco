@@ -1,10 +1,7 @@
 package objects
 
 import (
-	"fmt"
-
 	"github.com/hajimehoshi/ebiten/v2"
-	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"github.com/jessemolina/bronco/internal/assets/images/background"
 )
 
@@ -85,16 +82,17 @@ func (bg *Background) Draw(target *ebiten.Image) error {
 
 			opts.GeoM.Translate(offsetX, offsetY)
 			target.DrawImage(bg.img, opts)
-			message := fmt.Sprintf(output,
-				bg.frameWidth, bg.frameHeight,
-				bg.frameX, bg.frameY,
-				bg.targetX, bg.targetY,
-				bg.scale,
-			)
+			/*
+				message := fmt.Sprintf(output,
+					bg.frameWidth, bg.frameHeight,
+					bg.frameX, bg.frameY,
+					bg.targetX, bg.targetY,
+					bg.scale,
+				)
 
-			//ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f", ebiten.ActualTPS()))
-			ebitenutil.DebugPrint(target, message)
-
+				ebitenutil.DebugPrint(screen, fmt.Sprintf("TPS: %0.2f", ebiten.ActualTPS()))
+				ebitenutil.DebugPrint(target, message)
+			*/
 		}
 
 	}
@@ -105,7 +103,7 @@ func (bg *Background) Draw(target *ebiten.Image) error {
 func (bg *Background) move() {
 	max := float64(bg.frameWidth) * bg.scale
 	// TODO make pace dynamic
-	bg.targetX -= 5
+	bg.targetX -= 10
 	if float64(bg.targetX) < -max {
 		bg.targetX = 0
 	}
