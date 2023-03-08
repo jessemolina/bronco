@@ -1,4 +1,4 @@
-package animation
+package animate
 
 import (
 	"fmt"
@@ -17,7 +17,7 @@ pace:\t%v
 `
 )
 
-// Prints the animatin struct on screen.
+// Prints the animation struct on screen.
 func (a *Animation)debugPrint(img *ebiten.Image) {
 	message := fmt.Sprintf(output,
 		a.frameWidth, a.frameHeight,
