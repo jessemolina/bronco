@@ -33,6 +33,7 @@ func NewHorse(screenWidth int, screenHeight int) Object {
 		FrameY:      0,
 		TargetX:     50,
 		TargetY:     185,
+		Pace: 4,
 	}
 
 	h := &Horse{
@@ -58,7 +59,7 @@ type Horse struct {
 func (h *Horse) Update(tick uint) error {
 	// Pace determines how many ticks will occur before switching to next frame.
 	// Count is the number of frames in the sprite sheet.
-	pace, count := 3, 6
+	pace, count := int(h.animate.Pace), 6
 	frame := (int(tick) / pace) % count
 	//log.Println("tick: ", tick, "frame: ", frame)
 
