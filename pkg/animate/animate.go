@@ -2,6 +2,7 @@ package animate
 
 import (
 	"fmt"
+	"image"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
@@ -23,6 +24,7 @@ func (d direction) invert() direction {
 
 type Animation struct {
 	Img         *ebiten.Image
+	FrameCount  int
 	FrameWidth  int     // frame width
 	FrameHeight int     // frame height
 	FrameX      int     // x coordinate on frame
@@ -31,6 +33,13 @@ type Animation struct {
 	TargetY     float64 // y coordinate on target (i.e. screen)
 	Scale       float64 // scale of image
 	Pace        float64
+}
+
+func (a *Animation) Rectangle() image.Rectangle {
+	x0, y0 := int(a.TargetX), int(a.TargetY)
+	x1, y1 := x0+a.FrameWidth, y0+a.FrameHeight
+
+	return image.Rect(x0, y0, x1, y1)
 }
 
 // Prints the animation struct on screen.
@@ -73,13 +82,15 @@ func (a *Animation) DrawSequenceX(target *ebiten.Image, count int) {
 // TODO fix scrolling direction for left and right
 func (a *Animation) UpdateScrollWidth(maxWidth float64, direction int) {
 	switch direction {
-	case -1: 	a.TargetX += (a.Pace * float64(direction))
-	case 1: a.TargetX += (a.Pace * float64(direction))
+	case -1:
+		a.TargetX += (a.Pace * float64(direction))
+	case 1:
+		a.TargetX += (a.Pace * float64(direction))
 	default:
 	}
 	//	a.TargetX -= (a.Pace * float64(direction))
 	i := float64(direction)
-	max := maxWidth*i
+	max := maxWidth * i
 	if a.TargetX < max {
 		a.TargetX = float64(0)
 	}
