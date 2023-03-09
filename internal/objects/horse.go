@@ -27,18 +27,19 @@ func NewHorse(screenWidth int, screenHeight int) Object {
 
 	animate := &animate.Animation{
 		Img:         horse.Walk.Image,
+		FrameCount:  horse.Walk.Specs.Frames,
 		FrameWidth:  frameW,
 		FrameHeight: frameH,
 		FrameX:      0,
 		FrameY:      0,
 		TargetX:     50,
 		TargetY:     185,
-		Pace: 4,
+		Pace:        4,
 	}
 
 	h := &Horse{
-		animate: animate,
-		screenWidth: screenWidth,
+		animation:      animate,
+		screenWidth:  screenWidth,
 		screenHeight: screenHeight,
 	}
 
@@ -47,23 +48,22 @@ func NewHorse(screenWidth int, screenHeight int) Object {
 
 // Import images that are already decoded.
 type Horse struct {
-	animate      *animate.Animation
+	animation *animate.Animation
 	screenWidth  int
 	screenHeight int
 	isJump       bool
 }
 
-// Horse type with image and position.
 
 // Method for Updating
 func (h *Horse) Update(tick uint) error {
 	// Pace determines how many ticks will occur before switching to next frame.
 	// Count is the number of frames in the sprite sheet.
-	pace, count := int(h.animate.Pace), 6
+	pace, count := int(h.animation.Pace), h.animation.FrameCount
 	frame := (int(tick) / pace) % count
 	//log.Println("tick: ", tick, "frame: ", frame)
 
-	h.animate.FrameX = frame * h.animate.FrameWidth
+	h.animation.FrameX = frame * h.animation.FrameWidth
 
 	// TODO catch key press
 	key := ebiten.KeySpace
@@ -79,9 +79,9 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 	opts := &ebiten.DrawImageOptions{}
 	// TODO dynamically update the targetX and Y for horse
 	if h.isJump {
-		opts.GeoM.Translate(h.animate.TargetX, h.animate.TargetY-30)
+		opts.GeoM.Translate(h.animation.TargetX, h.animation.TargetY-30)
 	} else {
-		opts.GeoM.Translate(h.animate.TargetX, h.animate.TargetY)
+		opts.GeoM.Translate(h.animation.TargetX, h.animation.TargetY)
 	}
 
 	opts.GeoM.Scale(2, 2)
@@ -90,13 +90,13 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 	// x0, y0 := int(h.x), int(h.x)+h.height
 	// x1, y1 := x0 + h.width, y0 + h.height
 	//
-	x0, y0 := h.animate.FrameX, h.animate.FrameY
-	x1, y1 := x0+h.animate.FrameWidth, y0+h.animate.FrameHeight
+	x0, y0 := h.animation.FrameX, h.animation.FrameY
+	x1, y1 := x0+h.animation.FrameWidth, y0+h.animation.FrameHeight
 
 	// Crop spritesheet
 	r := image.Rect(x0, y0, x1, y1)
 
-	sub := h.animate.Img.SubImage(r).(*ebiten.Image)
+	sub := h.animation.Img.SubImage(r).(*ebiten.Image)
 
 	target.DrawImage(sub, opts)
 
@@ -104,4 +104,9 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 	ebitenutil.DebugPrint(target, message)
 
 	return nil
+}
+
+// Horse type with image and position.
+func (h *Horse) Coordinates() image.Rectangle {
+	return h.animation.Rectangle()
 }

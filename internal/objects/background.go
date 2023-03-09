@@ -1,6 +1,8 @@
 package objects
 
 import (
+	"image"
+
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/jessemolina/bronco/internal/assets/images/background"
 	"github.com/jessemolina/bronco/pkg/animate"
@@ -107,13 +109,7 @@ func (bg *Background) Draw(target *ebiten.Image) error {
 	return nil
 }
 
-/*
-func (bg *Background) move() {
-	max := float64(bg.frameWidth) * bg.scale
-	// TODO make pace dynamic
-	bg.targetX -= 10
-	if float64(bg.targetX) < -max {
-		bg.targetX = 0
-	}
+// Horse type with image and position.
+func (bg *Background) Coordinates() image.Rectangle {
+	return bg.animation.Rectangle()
 }
-*/

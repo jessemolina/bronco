@@ -1,6 +1,7 @@
 package objects
 
 import (
+	"image"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/jessemolina/bronco/internal/assets/images/obstacles"
@@ -36,14 +37,18 @@ func NewObstacle(screenWidth int, screenHeight int) Object {
 
 // Import images that are already decoded.
 type Obstacle struct {
-	animate *animate.Animation
+	animation *animate.Animation
 	screenWidth int
 	screenHeight int
 
 }
 
+func (o *Obstacle) Coordinates() image.Rectangle {
+	return o.animation.Rectangle()
+}
+
 func (o *Obstacle) Update(tick uint) error {
-	o.animate.UpdateScrollWidth(float64(o.screenWidth), -1)
+	o.animation.UpdateScrollWidth(float64(o.screenWidth), -1)
 
 	return nil
 }
@@ -55,6 +60,6 @@ func (o *Obstacle) Draw(target *ebiten.Image) error {
 	//repeat := (targetW / o.animate.FrameWidth) * 2
 	repeat := 1
 
-	o.animate.DrawSequenceX(target, repeat)
+	o.animation.DrawSequenceX(target, repeat)
 	return nil
 }

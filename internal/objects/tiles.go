@@ -1,6 +1,7 @@
 package objects
 
 import (
+	"image"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/jessemolina/bronco/internal/assets/images/tiles"
@@ -35,13 +36,19 @@ func NewTiles(screenWidth int, screenHeight int) Object {
 
 // Import images that are already decoded.
 type Tiles struct {
-	animate *animate.Animation
+	animation *animate.Animation
 	screenWidth int
 	screenHeight int
 }
 
+// Horse type with image and position.
+func (t *Tiles) Coordinates() image.Rectangle {
+	return t.animation.Rectangle()
+}
+
+
 func (t *Tiles) Update(tick uint) error {
-	t.animate.UpdateScrollWidth(float64(t.screenWidth), -1)
+	t.animation.UpdateScrollWidth(float64(t.screenWidth), -1)
 
 	return nil
 }
@@ -50,8 +57,8 @@ func (t *Tiles) Draw(target *ebiten.Image) error {
 	// create as many tiles to match the screenWidth.
 	// Multiply by 2 to enable scrolling.
 	targetW, _ := target.Size()
-	repeat := (targetW / t.animate.FrameWidth) * 2
+	repeat := (targetW / t.animation.FrameWidth) * 2
 
-	t.animate.DrawSequenceX(target, repeat)
+	t.animation.DrawSequenceX(target, repeat)
 	return nil
 }
