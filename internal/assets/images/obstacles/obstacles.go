@@ -38,5 +38,10 @@ func init() {
 		log.Fatalf("Unable to unmarshall specs: %v", err)
 	}
 
+	Rock01.Initialize(rock01_png, sheet)
 	Rock02.Initialize(rock02_png, sheet)
+	Rock03.Initialize(rock03_png, sheet)
+	Rock04.Initialize(rock04_png, sheet)
+	Rock05.Initialize(rock05_png, sheet)
+	Rock06.Initialize(rock06_png, sheet)
 }

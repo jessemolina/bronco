@@ -22,8 +22,11 @@ size: %v, %v
 func NewHorse(screenWidth int, screenHeight int) Object {
 
 	frameW, frameH := horse.Walk.Image.Size()
-
 	frameW = frameW / horse.Walk.Specs.Frames
+
+	//targetY := float64(screenHeight/2)
+	targetY := float64(185)
+	targetX := float64(50)
 
 	animate := &animate.Animation{
 		Img:         horse.Walk.Image,
@@ -32,13 +35,13 @@ func NewHorse(screenWidth int, screenHeight int) Object {
 		FrameHeight: frameH,
 		FrameX:      0,
 		FrameY:      0,
-		TargetX:     50,
-		TargetY:     185,
+		TargetX:     targetX,
+		TargetY:     targetY,
 		Pace:        4,
 	}
 
 	h := &Horse{
-		animation:      animate,
+		animation:    animate,
 		screenWidth:  screenWidth,
 		screenHeight: screenHeight,
 	}
@@ -48,12 +51,11 @@ func NewHorse(screenWidth int, screenHeight int) Object {
 
 // Import images that are already decoded.
 type Horse struct {
-	animation *animate.Animation
+	animation    *animate.Animation
 	screenWidth  int
 	screenHeight int
 	isJump       bool
 }
-
 
 // Method for Updating
 func (h *Horse) Update(tick uint) error {
@@ -109,4 +111,51 @@ func (h *Horse) Draw(target *ebiten.Image) error {
 // Horse type with image and position.
 func (h *Horse) Coordinates() image.Rectangle {
 	return h.animation.Rectangle()
+}
+
+func (h *Horse) Animation(s string) {
+	switch s {
+	case "idle":
+		h.idle()
+	case "jump":
+		h.jump()
+	case "walk":
+		h.walk()
+	default:
+		h.walk()
+	}
+}
+
+func (h *Horse) walk() {
+
+	frameW, frameH := horse.Walk.Image.Size()
+	frameW = frameW / horse.Walk.Specs.Frames
+
+	h.animation.Img = horse.Walk.Image
+	h.animation.FrameCount = horse.Walk.Specs.Frames
+	h.animation.FrameWidth = frameW
+	h.animation.FrameHeight = frameH
+}
+
+func (h *Horse) idle() {
+
+	frameW, frameH := horse.Idle.Image.Size()
+	frameW = frameW / horse.Idle.Specs.Frames
+
+	h.animation.Img = horse.Idle.Image
+	h.animation.FrameCount = horse.Idle.Specs.Frames
+	h.animation.FrameWidth = frameW
+	h.animation.FrameHeight = frameH
+	h.animation.Pace = 1
+}
+
+func (h *Horse) jump() {
+
+	frameW, frameH := horse.Jump.Image.Size()
+	frameW = frameW / horse.Jump.Specs.Frames
+
+	h.animation.Img = horse.Jump.Image
+	h.animation.FrameCount = horse.Jump.Specs.Frames
+	h.animation.FrameWidth = frameW
+	h.animation.FrameHeight = frameH
 }

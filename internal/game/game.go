@@ -8,23 +8,25 @@ import (
 )
 
 type Mode int
-type Object *objects.Object
 
 const (
-	//	screenWidth      = 640
-	// screenHeight     = 480
 	ModeTitle Mode = iota
 	ModeGameStart
 	ModeGameOver
+)
 
+const (
 	// Objectes, from last to first in layer
 	Background = iota
 	Floor
-	Horse
 	Obstacle
+	Horse
+)
 
+const (
 	screenWidth  = 960
 	screenHeight = 540
+	floorOffset  = 8
 )
 
 // ================================================================
@@ -32,16 +34,15 @@ const (
 
 func NewGame() *Game {
 	ebiten.SetWindowSize(screenWidth, screenHeight)
-	ebiten.SetWindowTitle("Go Bronco!")
-	g := &Game{}
+	ebiten.SetWindowTitle("Go, Bronco, Go!")
 
-
+	g := &Game{mode: ModeGameStart}
 
 	g.objects = []objects.Object{
 		objects.NewBackground(screenWidth, screenHeight),
-		objects.NewTiles(screenWidth, screenHeight),
-		objects.NewHorse(screenWidth, screenHeight),
+		objects.NewTiles(screenWidth, screenHeight, floorOffset),
 		objects.NewObstacle(screenWidth, screenHeight),
+		objects.NewHorse(screenWidth, screenHeight),
 	}
 	return g
 }
@@ -60,20 +61,40 @@ type Game struct {
 // Updates the Tick, the time unit for logical updates.
 func (g *Game) Update() error {
 	g.tick++
-	/*
+
 	switch g.mode {
 	case ModeTitle:
-		g.objects[Horse].Coordinates()
+		for i, o := range g.objects {
+			o.Update(g.tick)
+			if i == Horse {
+				o.Animation("jump")
+			} else {
+				o.Animation("stop")
+			}
+		}
+		//log.Printf("Coordinates: %v", g.objects[Horse].Coordinates())
 	case ModeGameStart:
-		// keep track of horse and obstable x and y's
-		// TODO catch key press
-
-		//key := ebiten.KeySpace
-		//h.isJump = ebiten.IsKeyPressed(key)
-
+		for i, o := range g.objects {
+			o.Update(g.tick)
+			if i == Horse {
+				o.Animation("walk")
+			} else {
+				o.Animation("start")
+			}
+		}
 	case ModeGameOver:
+		for i, o := range g.objects {
+			o.Update(g.tick)
+			if i == Horse {
+				o.Animation("walk")
+			} else {
+				o.Animation("stop")
+			}
+		}
+
+	default:
+		log.Printf("Mode Default: %v", "default")
 	}
-	*/
 
 	for _, o := range g.objects {
 		o.Update(g.tick)

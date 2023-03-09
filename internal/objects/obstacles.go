@@ -10,20 +10,22 @@ import (
 
 func NewObstacle(screenWidth int, screenHeight int) Object {
 
-	frameW, frameH := obstacles.Rock02.Image.Size()
+	frameW, frameH := obstacles.Rock05.Image.Size()
 
-	targetY := float64(screenHeight/2)
-	targetX := float64(screenWidth/2)
+	diffY := frameH + 60
+	//targetY := float64(screenHeight/2)
+	targetY := float64(screenHeight - diffY)
+	targetX := float64(screenWidth)
 	//targetX := float64(screenWidth / 2)
 
 	anm := &animate.Animation{
-		Img:         obstacles.Rock02.Image,
+		Img:         obstacles.Rock05.Image,
 		FrameWidth:  frameW,
 		FrameHeight: frameH,
 		TargetX:     targetX,
 		TargetY:     targetY,
-		Pace: 2,
-		Scale: 1,
+		Pace:        2,
+		Scale:       2,
 	}
 
 	o := &Obstacle{
@@ -37,9 +39,22 @@ func NewObstacle(screenWidth int, screenHeight int) Object {
 
 // Import images that are already decoded.
 type Obstacle struct {
-	animation *animate.Animation
-	screenWidth int
+	animation    *animate.Animation
+	screenWidth  int
 	screenHeight int
+}
+
+func (o *Obstacle) Animation(s string) {
+	switch s {
+	case "stop":
+		o.animation.Pace = 0
+	case "start":
+		o.animation.Pace = 2
+	case "faster":
+		o.animation.Pace += 1
+	case "slower":
+		o.animation.Pace -= 1
+	}
 
 }
 

@@ -10,4 +10,5 @@ type Object interface {
 	Update(uint) error
 	Draw(*ebiten.Image) error
 	Coordinates() image.Rectangle
+	Animation(string)
 }

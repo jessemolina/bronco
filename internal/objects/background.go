@@ -113,3 +113,14 @@ func (bg *Background) Draw(target *ebiten.Image) error {
 func (bg *Background) Coordinates() image.Rectangle {
 	return bg.animation.Rectangle()
 }
+
+func (bg *Background) Animation(s string) {
+	switch s {
+	case "stop":
+		bg.animation.Pace = 0
+	case "start":
+		bg.animation.Pace = 2
+	case "faster":
+		bg.animation.Pace += 1
+	}
+}
