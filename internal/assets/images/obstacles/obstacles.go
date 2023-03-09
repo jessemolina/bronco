@@ -19,17 +19,17 @@ var (
 	Rock06 *sprites.Sprites = &sprites.Sprites{Name: "Rock06.png"}
 
 	//go:embed Rock01.png
-	Rock01_png []byte
+	rock01_png []byte
 	//go:embed Rock02.png
-	Rock02_png []byte
+	rock02_png []byte
 	//go:embed Rock03.png
-	Rock03_png []byte
+	rock03_png []byte
 	//go:embed Rock04.png
-	Rock04_png []byte
+	rock04_png []byte
 	//go:embed Rock05.png
-	Rock05_png []byte
+	rock05_png []byte
 	//go:embed Rock06.png
-	Rock06_png []byte
+	rock06_png []byte
 )
 
 func init() {
