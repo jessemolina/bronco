@@ -7,11 +7,23 @@ import (
 	"github.com/jessemolina/bronco/internal/objects"
 )
 
+type Mode int
+type Object *objects.Object
+
 const (
 	//	screenWidth      = 640
 	// screenHeight     = 480
+	ModeTitle Mode = iota
+	ModeGameStart
+	ModeGameOver
 
-	screenWidth = 960
+	// Objectes, from last to first in layer
+	Background = iota
+	Floor
+	Horse
+	Obstacle
+
+	screenWidth  = 960
 	screenHeight = 540
 )
 
@@ -22,6 +34,8 @@ func NewGame() *Game {
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("Go Bronco!")
 	g := &Game{}
+
+
 
 	g.objects = []objects.Object{
 		objects.NewBackground(screenWidth, screenHeight),
@@ -40,11 +54,27 @@ func NewGame() *Game {
 type Game struct {
 	tick    uint
 	objects []objects.Object
+	mode    Mode
 }
 
 // Updates the Tick, the time unit for logical updates.
 func (g *Game) Update() error {
 	g.tick++
+	/*
+	switch g.mode {
+	case ModeTitle:
+		g.objects[Horse].Coordinates()
+	case ModeGameStart:
+		// keep track of horse and obstable x and y's
+		// TODO catch key press
+
+		//key := ebiten.KeySpace
+		//h.isJump = ebiten.IsKeyPressed(key)
+
+	case ModeGameOver:
+	}
+	*/
+
 	for _, o := range g.objects {
 		o.Update(g.tick)
 	}
