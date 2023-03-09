@@ -1,0 +1,40 @@
+{
+  "images": [
+    {
+      "name": "Rock01.png",
+      "width": 80,
+      "height": 32,
+      "frames": 1
+    },
+    {
+      "name": "Rock02.png",
+      "width": 160,
+      "height": 64,
+      "frames": 1
+    },
+    {
+      "name": "Rock03.png",
+      "width": 96,
+      "height": 32,
+      "frames": 1
+    },
+    {
+      "name": "Rock04.png",
+      "width": 112,
+      "height": 48,
+      "frames": 1
+    },
+    {
+      "name": "Rock05.png",
+      "width": 96,
+      "height": 32,
+      "frames": 1
+    },
+    {
+      "name": "Rock06.png",
+      "width": 96,
+      "height": 32,
+      "frames": 1
+    }
+  ]
+}

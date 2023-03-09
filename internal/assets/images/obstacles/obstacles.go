@@ -8,7 +8,7 @@ import (
 	"github.com/jessemolina/bronco/pkg/sprites"
 )
 
-const specJSON = "internal/assets/images/tiles/tiles.json"
+const specJSON = "internal/assets/images/obstacles/obstacles.json"
 
 var (
 	Rock01 *sprites.Sprites = &sprites.Sprites{Name: "Rock01.png"}
@@ -19,17 +19,17 @@ var (
 	Rock06 *sprites.Sprites = &sprites.Sprites{Name: "Rock06.png"}
 
 	//go:embed Rock01.png
-	rock01_png []byte
+	Rock01_png []byte
 	//go:embed Rock02.png
-	rock02_png []byte
+	Rock02_png []byte
 	//go:embed Rock03.png
-	rock03_png []byte
+	Rock03_png []byte
 	//go:embed Rock04.png
-	rock04_png []byte
+	Rock04_png []byte
 	//go:embed Rock05.png
-	rock05_png []byte
+	Rock05_png []byte
 	//go:embed Rock06.png
-	rock06_png []byte
+	Rock06_png []byte
 )
 
 func init() {
