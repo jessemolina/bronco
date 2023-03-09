@@ -22,7 +22,7 @@ func NewObstacle(screenWidth int, screenHeight int) Object {
 		TargetX:     targetX,
 		TargetY:     targetY,
 		Pace: 2,
-		Scale: 2,
+		Scale: 1,
 	}
 
 	o := &Obstacle{
@@ -43,7 +43,7 @@ type Obstacle struct {
 }
 
 func (o *Obstacle) Update(tick uint) error {
-	//o.animate.UpdateScrollWidth(float64(o.screenWidth), -1)
+	o.animate.UpdateScrollWidth(float64(o.screenWidth), -1)
 
 	return nil
 }
@@ -51,8 +51,8 @@ func (o *Obstacle) Update(tick uint) error {
 func (o *Obstacle) Draw(target *ebiten.Image) error {
 	// create as many tiles to match the screenWidth.
 	// Multiply by 2 to enable scrolling.
-	// targetW, _ := target.Size()
-	// repeat := (targetW / o.animate.FrameWidth) * 2
+	//targetW, _ := target.Size()
+	//repeat := (targetW / o.animate.FrameWidth) * 2
 	repeat := 1
 
 	o.animate.DrawSequenceX(target, repeat)
