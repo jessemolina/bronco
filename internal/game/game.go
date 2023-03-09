@@ -27,6 +27,7 @@ func NewGame() *Game {
 		objects.NewBackground(screenWidth, screenHeight),
 		objects.NewTiles(screenWidth, screenHeight),
 		objects.NewHorse(screenWidth, screenHeight),
+		objects.NewObstacle(screenWidth, screenHeight),
 	}
 	return g
 }
