@@ -1,9 +1,12 @@
 package game
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
+	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/jessemolina/bronco/internal/objects"
 )
 
@@ -18,6 +21,7 @@ const (
 const (
 	// Objectes, from last to first in layer
 	Background = iota
+	Banner
 	Floor
 	Obstacle
 	Horse
@@ -36,14 +40,16 @@ func NewGame() *Game {
 	ebiten.SetWindowSize(screenWidth, screenHeight)
 	ebiten.SetWindowTitle("Go, Bronco, Go!")
 
-	g := &Game{mode: ModeGameStart}
+	g := &Game{mode: ModeTitle}
 
 	g.objects = []objects.Object{
 		objects.NewBackground(screenWidth, screenHeight),
+		objects.NewBanner(screenWidth, screenHeight),
 		objects.NewTiles(screenWidth, screenHeight, floorOffset),
-		objects.NewObstacle(screenWidth, screenHeight),
 		objects.NewHorse(screenWidth, screenHeight),
 	}
+
+	g.level = NewLevel(screenWidth, screenHeight)
 	return g
 }
 
@@ -55,6 +61,8 @@ func NewGame() *Game {
 type Game struct {
 	tick    uint
 	objects []objects.Object
+	level   *level
+	score   int
 	mode    Mode
 }
 
@@ -63,33 +71,67 @@ func (g *Game) Update() error {
 	g.tick++
 
 	switch g.mode {
+
 	case ModeTitle:
-		for i, o := range g.objects {
-			o.Update(g.tick)
-			if i == Horse {
-				o.Animation("jump")
-			} else {
-				o.Animation("stop")
+		if inpututil.IsKeyJustPressed(ebiten.KeyEnter) {
+			g.mode = ModeGameStart
+			for _, o := range g.objects {
+				o.Animation(int(g.mode))
 			}
 		}
-		//log.Printf("Coordinates: %v", g.objects[Horse].Coordinates())
+
+		for _, o := range g.objects {
+			o.Update(g.tick)
+			/*
+				if i == Horse {
+					o.Animation("jump")
+				} else {
+					o.Animation("stop")
+				}
+			*/
+		}
+
 	case ModeGameStart:
-		for i, o := range g.objects {
-			o.Update(g.tick)
-			if i == Horse {
-				o.Animation("walk")
-			} else {
-				o.Animation("start")
+		if inpututil.IsKeyJustPressed(ebiten.KeyEnter) {
+			g.mode = ModeGameOver
+			for _, o := range g.objects {
+				o.Animation(int(g.mode))
 			}
+
 		}
-	case ModeGameOver:
-		for i, o := range g.objects {
+		for _, o := range g.objects {
 			o.Update(g.tick)
-			if i == Horse {
-				o.Animation("walk")
-			} else {
-				o.Animation("stop")
+
+			/*
+				if i == Horse {
+					o.Animation("jump")
+				} else {
+					o.Animation("start")
+				}
+			*/
+		}
+
+		g.level.Update(g.tick)
+
+	case ModeGameOver:
+		if inpututil.IsKeyJustPressed(ebiten.KeyEnter) {
+			g.mode = ModeTitle
+			for _, o := range g.objects {
+				o.Animation(int(g.mode))
 			}
+
+		}
+
+		for _, o := range g.objects {
+			o.Update(g.tick)
+
+			/*
+				if i == Horse {
+					o.Animation("jump")
+				} else {
+					o.Animation("stop")
+				}
+			*/
 		}
 
 	default:
@@ -111,6 +153,13 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			log.Fatalf("Error: %v", err)
 		}
 	}
+
+	g.level.Draw(screen)
+
+	message := fmt.Sprintf("Mode: %v", g.mode)
+	ebitenutil.DebugPrint(screen, message)
+
+
 }
 
 // Returns the game's logical screen based on the given window

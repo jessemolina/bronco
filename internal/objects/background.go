@@ -114,13 +114,13 @@ func (bg *Background) Coordinates() image.Rectangle {
 	return bg.animation.Rectangle()
 }
 
-func (bg *Background) Animation(s string) {
-	switch s {
-	case "stop":
+func (bg *Background) Animation(set int) {
+	switch set {
+	case 0:
 		bg.animation.Pace = 0
-	case "start":
+	case 1:
 		bg.animation.Pace = 2
-	case "faster":
-		bg.animation.Pace += 1
+	case 2:
+		bg.animation.Pace = 0
 	}
 }

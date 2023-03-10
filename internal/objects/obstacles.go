@@ -24,7 +24,7 @@ func NewObstacle(screenWidth int, screenHeight int) Object {
 		FrameHeight: frameH,
 		TargetX:     targetX,
 		TargetY:     targetY,
-		Pace:        2,
+		Pace:        15,
 		Scale:       2,
 	}
 
@@ -44,16 +44,14 @@ type Obstacle struct {
 	screenHeight int
 }
 
-func (o *Obstacle) Animation(s string) {
-	switch s {
-	case "stop":
+func (o *Obstacle) Animation(set int) {
+	switch set {
+	case 0:
 		o.animation.Pace = 0
-	case "start":
+	case 1:
 		o.animation.Pace = 2
-	case "faster":
-		o.animation.Pace += 1
-	case "slower":
-		o.animation.Pace -= 1
+	case 2:
+		o.animation.Pace = 0
 	}
 
 }
@@ -63,7 +61,13 @@ func (o *Obstacle) Coordinates() image.Rectangle {
 }
 
 func (o *Obstacle) Update(tick uint) error {
-	o.animation.UpdateScrollWidth(float64(o.screenWidth), -1)
+	//o.animation.UpdateScrollWidth(float64(o.screenWidth)+60, -1)
+	direction := -1
+	o.animation.TargetX += (o.animation.Pace * float64(direction))
+	max := float64(o.screenWidth * direction)
+	if o.animation.TargetX < max {
+		o.animation.TargetX = float64(o.screenWidth)
+	}
 
 	return nil
 }

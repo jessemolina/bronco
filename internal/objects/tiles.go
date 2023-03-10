@@ -62,15 +62,13 @@ func (t *Tiles) Coordinates() image.Rectangle {
 	return t.animation.Rectangle()
 }
 
-func (t *Tiles) Animation(s string) {
-	switch s {
-	case "stop":
+func (t *Tiles) Animation(set int) {
+	switch set {
+	case 0:
 		t.animation.Pace = 0
-	case "start":
+	case 1:
 		t.animation.Pace = 2
-	case "faster":
-		t.animation.Pace += 1
-	case "slower":
-		t.animation.Pace -= 1
+	case 2:
+		t.animation.Pace = 0
 	}
 }
