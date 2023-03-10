@@ -11,16 +11,19 @@ import (
 const specJSON = "internal/assets/images/horse/horse.json"
 
 var (
-	Idle *sprites.Sprites = &sprites.Sprites{Name: "Idle.png"}
-	Jump *sprites.Sprites = &sprites.Sprites{Name: "Jump.png"}
-	Walk *sprites.Sprites = &sprites.Sprites{Name: "Walk.png"}
+	Idle     *sprites.Sprites = &sprites.Sprites{Name: "Idle.png"}
+	IdleLong *sprites.Sprites = &sprites.Sprites{Name: "IdleLong.png"}
+	Jump     *sprites.Sprites = &sprites.Sprites{Name: "Jump.png"}
+	Walk     *sprites.Sprites = &sprites.Sprites{Name: "Walk.png"}
 
 	//go:embed Idle.png
-	Idle_png []byte
+	idle_png []byte
+	//go:embed Idle.png
+	idleLong_png []byte
 	//go:embed Jump.png
-	Jump_png []byte
+	jump_png []byte
 	//go:embed Walk.png
-	Walk_png []byte
+	walk_png []byte
 )
 
 func init() {
@@ -29,7 +32,8 @@ func init() {
 		log.Fatalf("Unable to unmarshall specs: %v", err)
 	}
 
-	Idle.Initialize(Idle_png, sheet)
-	Jump.Initialize(Jump_png, sheet)
-	Walk.Initialize(Walk_png, sheet)
+	Idle.Initialize(idle_png, sheet)
+	IdleLong.Initialize(idle_png, sheet)
+	Jump.Initialize(jump_png, sheet)
+	Walk.Initialize(walk_png, sheet)
 }
