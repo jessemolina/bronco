@@ -18,7 +18,7 @@ var (
 
 	//go:embed Idle.png
 	idle_png []byte
-	//go:embed Idle.png
+	//go:embed IdleLong.png
 	idleLong_png []byte
 	//go:embed Jump.png
 	jump_png []byte
@@ -33,7 +33,7 @@ func init() {
 	}
 
 	Idle.Initialize(idle_png, sheet)
-	IdleLong.Initialize(idle_png, sheet)
+	IdleLong.Initialize(idleLong_png, sheet)
 	Jump.Initialize(jump_png, sheet)
 	Walk.Initialize(walk_png, sheet)
 }
